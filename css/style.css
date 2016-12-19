@@ -1,0 +1,15 @@
+/*Hide all except first section*/
+
+/*
+#steps section:not(:first-of-type) {
+    display: none;
+}
+*/
+
+.steps{
+    display:none;
+}
+
+.no_bullets li{
+    list-style-type: none;
+}

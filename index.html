@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="author" content="Siftnoor Singh">
+    <meta name="description" content="Course Planner">
+    <title>Course Planner</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sankey.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://rawgithub.com/d3/d3-plugins/master/sankey/sankey.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/visualisation.js"></script>
+    <script src="js/main.js"></script>
+</head>
+
+<body>
+    <section id="steps">
+        <section id="fetch"> <a type href="#" id="careers">Get Careers</a>
+            <br/> <a type href="#" id="majors">Get Majors</a>
+            <br/> <a type href="#" id="subjects">Get Subjects (First Year)</a> </section>
+        <section id="careers_list" class="steps clearfix"> <pre></pre>
+            <ul class="no_bullets"></ul>            
+        </section>
+        <section id="majors_list" class="steps clearfix"> <pre></pre>
+            <ul class="no_bullets"></ul>
+        </section>
+        <section id="subjects_list" class="steps clearfix"> <pre></pre>
+            <ul class="no_bullets"></ul>
+        </section>
+        <section id="choose_careers" class="steps clearfix"> <pre></pre>
+            <ul class="no_bullets"></ul>
+        </section>
+        <section id="choose_majors" class="steps clearfix"> <pre></pre>
+            <ul class="no_bullets"></ul>
+        </section>
+        <section id="show_subjects" class="steps clearfix"> <pre></pre>
+            <ul class="no_bullets"></ul>
+        </section>
+        <section id="show_majors" class="steps clearfix"> <pre></pre>
+            <ul class="no_bullets"></ul>
+        </section>
+        <section id="filtered_majors" class="steps clearfix"> <pre></pre>
+            <ul class="no_bullets"></ul>
+        </section> 
+        <section id="filtered_third_subs" class="steps clearfix"> <pre></pre>
+            <ul class="no_bullets"></ul>
+        </section>       
+        <p id="chart" class="steps"></p>
+        <button href="#" class="prev">Previous</button>
+    </section>
+</body>
+
+</html>
