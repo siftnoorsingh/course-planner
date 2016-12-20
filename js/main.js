@@ -139,9 +139,6 @@ $(document).ready(function () {
                 });
                 $("#show_chosen_subjects").append('<button href="#" id="view_visual">View Visual</button>');
                 $("#show_chosen_subjects").show();
-                console.log(target_sub_value_first)
-                console.log(target_sub_value_second)
-                console.log(target_sub_value_third_final)
                 buildMajorData();
             });
         }
@@ -241,7 +238,13 @@ $(document).ready(function () {
             $("#filtered_third_subs").hide();
             $('#show_chosen_subjects').empty();
             $('#show_chosen_subjects').hide();
+            console.log(target_sub_value_first)
+            console.log(target_sub_value_second)
+            console.log(target_sub_value_third_final)
             console.log(selected_major)
+            $.getJSON("json/visuals/" + selected_major + ".json", function (data) {
+                
+            });
 //            window.chosen_major = $(this).attr('id')
 //            window.getVis();
         });
