@@ -3,9 +3,10 @@ $(document).ready(function () {
     var jsonData = {};
     var checkedValues = {};
     var checkedValues_subs = {};
-    var isSuperset = false;
     var major_arr = [];
     var second_year_arr = [];
+    var isSuperset = false;
+    var first_year_arr = [];
     var third_year_arr = [];
     var target_sub_value_first = [];
     var target_sub_value_second = [];
@@ -108,7 +109,10 @@ $(document).ready(function () {
                 $.each(checkedValues, function (i, d) {
                     $("#show_subjects ul").append('<li>' + d + '</li>');
                 });
+                // dummy button and JSON file passed as is without modification as requrested by the Faculty of Science team for demo purposes.
+                $("#show_subjects").html('<button href="#" id="view_majors_from_subs">View majors</button>');
                 $("#show_subjects").show();
+                buildMajorVis();
             });
             $("#subjects_list li").on('click', 'input[type="checkbox"]', function (e) {
                 $("#show_majors ul").empty();
@@ -127,7 +131,6 @@ $(document).ready(function () {
                 checkedValuesSubs = $("#filtered_third_subs li input[type=checkbox]:checked").map(function () {
                     return $(this).attr('id');
                 }).get();
-//                console.log(checkedValuesSubs);
                 target_sub_value_third_final = []
                 $.each(checkedValuesSubs, function (i, sub) {
                     $("#show_chosen_subjects ul").append('<li>' + sub + '</li>');
@@ -242,9 +245,12 @@ $(document).ready(function () {
             console.log(target_sub_value_second)
             console.log(target_sub_value_third_final)
             console.log(selected_major)
-            $.getJSON("json/visuals/" + selected_major + ".json", function (data) {
-                
+            dataOb = $.getJSON("json/visuals/" + selected_major + ".json", function (data) {
+                return data
             });
+            window.dataObject = JSON.parse(dataOb)
+//            window.getVis();
+            // Continue from here. The selected first year , second year and third year subjects have been saved in the variables logged above. They need to be removed from the data object nodes and the links need to be remodified so that they correspond to the correct source and target nodes. Once this is done the final object can be passed to the visualisation.js file. 
 //            window.chosen_major = $(this).attr('id')
 //            window.getVis();
         });
