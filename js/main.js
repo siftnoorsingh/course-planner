@@ -1,10 +1,17 @@
 $(document).ready(function () {
     var appData = {};
+    var jsonData = {};
     var checkedValues = {};
+    var checkedValues_subs = {};
     var isSuperset = false;
     var major_arr = [];
     var second_year_arr = [];
     var third_year_arr = [];
+    var target_sub_value_first = [];
+    var target_sub_value_second = [];
+    var target_sub_second = [];
+    var target_sub_value_third = [];
+    var target_sub_value_third_final = [];
     $("#careers").on('click', function (e) {
         $('#careers_list ul').empty();
         $('#careers_list pre').empty();
@@ -93,31 +100,52 @@ $(document).ready(function () {
         subsChecked();
     }
     var subsChecked = function () {
-        $("#choose_majors li").on('click', 'input[type="checkbox"]', function (e) {
-            $("#show_subjects ul").empty();
-            checkedValues = $("#choose_majors li input[type=checkbox]:checked").map(function () {
-                return $(this).attr('id');
-                //                            return $(this).val();
+            $("#choose_majors li").on('click', 'input[type="checkbox"]', function (e) {
+                $("#show_subjects ul").empty();
+                checkedValues = $("#choose_majors li input[type=checkbox]:checked").map(function () {
+                    return $(this).attr('id');
+                });
+                $.each(checkedValues, function (i, d) {
+                    $("#show_subjects ul").append('<li>' + d + '</li>');
+                });
+                $("#show_subjects").show();
             });
-            $.each(checkedValues, function (i, d) {
-                $("#show_subjects ul").append('<li>' + d + '</li>');
+            $("#subjects_list li").on('click', 'input[type="checkbox"]', function (e) {
+                $("#show_majors ul").empty();
+                checkedValues = $("#subjects_list li input[type=checkbox]:checked").map(function () {
+                    return $(this).attr('id');
+                }).get();
+                $.each(checkedValues, function (i, d) {
+                    $("#show_majors ul").append('<li>' + d + '</li>');
+                });
+                $("#show_majors").html('<button href="#" id="view_majors">View majors</button>');
+                $("#show_majors").show();
+                buildMajorsList();
             });
-            $("#show_subjects").show();
-        });
-        $("#subjects_list li").on('click', 'input[type="checkbox"]', function (e) {
-            $("#show_majors ul").empty();
-            checkedValues = $("#subjects_list li input[type=checkbox]:checked").map(function () {
-                return $(this).attr('id');
-            }).get();
-            $.each(checkedValues, function (i, d) {
-                $("#show_majors ul").append('<li>' + d + '</li>');
+            $("#filtered_third_subs li").on('click', 'input[type="checkbox"]', function (e) {
+                $("#show_chosen_subjects ul").empty();
+                checkedValuesSubs = $("#filtered_third_subs li input[type=checkbox]:checked").map(function () {
+                    return $(this).attr('id');
+                }).get();
+//                console.log(checkedValuesSubs);
+                target_sub_value_third_final = []
+                $.each(checkedValuesSubs, function (i, sub) {
+                    $("#show_chosen_subjects ul").append('<li>' + sub + '</li>');
+                    $.each(jsonData.nodes, function (i, data2) {
+                        if (data2.name==sub){
+                            target_sub_value_third_final = arrayUnique(target_sub_value_third_final.concat(i));
+                        }
+                    });                    
+                });
+                $("#show_chosen_subjects").append('<button href="#" id="view_visual">View Visual</button>');
+                $("#show_chosen_subjects").show();
+                console.log(target_sub_value_first)
+                console.log(target_sub_value_second)
+                console.log(target_sub_value_third_final)
+                buildMajorData();
             });
-            $("#show_majors").html('<button href="#" id="view_majors">View majors</button>');
-            $("#show_majors").show();
-            buildMajorsList();
-        });
-    }
-    //remove all duplicate values in an array
+        }
+        //remove all duplicate values in an array
     function arrayUnique(array) {
         var a = array.concat();
         for (var i = 0; i < a.length; ++i) {
@@ -128,7 +156,9 @@ $(document).ready(function () {
         return a;
     }
     var buildMajorsList = function () {
+        
         $("#view_majors").on('click', function () {
+            $("#show_majors").hide();
             $.getJSON('json/firstyrsubs.json', function (data) {
                 $.each(data.subjects, function (i, data2) {
                     var chosen_subs = data2.first_subs
@@ -160,10 +190,8 @@ $(document).ready(function () {
     var chosenMajor = function () {
         $("#filtered_majors a.chosen_major").on('click', function (e) {
             selected_major = $(this).attr('id');
-            var target_sub_value_second = [];
-            var target_sub_second = [];
-            var target_sub_value_third = [];
             $.getJSON("json/visuals/" + selected_major + ".json", function (data) {
+                jsonData = data
                 $.each(data.nodes, function (i, data2) {
                     var chosen_subs_split = data2.name.split(" ");
                     // check if chosen_subs is contained in arr2(checkedValues)
@@ -172,8 +200,10 @@ $(document).ready(function () {
                         return checkedValues.indexOf(val) >= 0;
                     });
                     if (isSuperset) {
+                        //                        first_year_arr = arrayUnique(first_year_arr.concat(data2.name)).sort();
                         $.each(data.links, function (j, data2) {
                             if (data2.source == i) {
+                                target_sub_value_first = target_sub_value_first.concat(data2.source);
                                 target_sub_value_second = target_sub_value_second.concat(data2.target);
                             }
                         });
@@ -187,6 +217,8 @@ $(document).ready(function () {
                                 }
                             });
                         });
+                        target_sub_value_first = arrayUnique(target_sub_value_first)
+                        third_year_arr = arrayUnique(third_year_arr)
                         filteredThirdSubs();
                     }
                 });
@@ -201,6 +233,18 @@ $(document).ready(function () {
             $("#filtered_third_subs ul").append('<li><label><input type="checkbox" class="chosen_subjects" id="' + value + '"> ' + value + '</label></li>');
         });
         $("#filtered_third_subs").show();
+        subsChecked();
+    }
+    var buildMajorData = function(){
+        $("#view_visual").on('click', function (e) {
+            $("#filtered_third_subs ul").empty();
+            $("#filtered_third_subs").hide();
+            $('#show_chosen_subjects').empty();
+            $('#show_chosen_subjects').hide();
+            console.log(selected_major)
+//            window.chosen_major = $(this).attr('id')
+//            window.getVis();
+        });
     }
     var buildMajorVis = function () {
         $("#chart").show();
