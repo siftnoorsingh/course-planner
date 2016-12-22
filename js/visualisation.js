@@ -1,4 +1,5 @@
 window.getVis = function () {
+    // providing margins, width and height to the svg element
     var margin = {
             top: 10
             , right: 10
@@ -7,19 +8,24 @@ window.getVis = function () {
         }
         , width = 1000 - margin.left - margin.right
         , height = 600 - margin.top - margin.bottom;
+    // format of the values that appear when a user hovers over the link between two elements
     var formatNumber = d3.format(",.0f")
         , format = function (d) {
             return d + " nodes";
         }
         , color = d3.scale.category20();
+    // creating the svg element
     var svg = d3.select("#chart").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // initialising properties of the sankey diagram
     var sankey = d3.sankey().nodeWidth(90).nodePadding(15).size([width, height]);
     var path = sankey.link();
     //loading the data though a json file
     if (typeof window.chosen_major != 'undefined') {
         d3.json("json/visuals/" + window.chosen_major + ".json", function (error, graph) {
             console.log(graph)
+            // add the nodes and links from the json file into the sankey diagram
             sankey.nodes(graph.nodes).links(graph.links).layout(32);
+            // add the properties for the link element of the svg
             var link = svg.append("g").selectAll(".link").data(graph.links).enter().append("path").attr("class", "link").style("fill", "none").style("stroke", function (d) {
                 return d.target.color = color(d.target.name.replace(/ .*/, ""));
             }).attr("d", path).style("stroke-width", function (d) {
@@ -27,9 +33,11 @@ window.getVis = function () {
             }).sort(function (a, b) {
                 return b.dy - a.dy;
             });
+            // adding text in the links that appears when you hover over the links
             link.append("title").text(function (d) {
                 return d.source.name + " → " + d.target.name + "\n" + format(d.value);
             });
+            // add the properties for the node element of the svg 
             var node = svg.append("g").selectAll(".node").data(graph.nodes).enter().append("g").attr("class", "node").attr("transform", function (d) {
                     return "translate(" + d.x + "," + d.y + ")";
                 })
@@ -39,6 +47,7 @@ window.getVis = function () {
                 .on("dragstart", function() { this.parentNode.appendChild(this); })
                 .on("drag", dragmove))*/
             ;
+            // add text in the //add comments from here
             node.append("rect").attr("height", function (d) {
                 return d.dy;
             }).attr("width", sankey.nodeWidth()).style("fill", function (d) {
@@ -61,7 +70,8 @@ window.getVis = function () {
                 sankey.relayout();
                 link.attr("d", path);
             }
-
+            // wrapping the labels in the nodes to fit the width of the node and move into the next line if it increases more than the width of
+            // the node
             function wrap(text, width) {
                 text.each(function () {
                     var text = d3.select(this)
