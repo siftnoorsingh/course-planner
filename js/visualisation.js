@@ -47,7 +47,7 @@ window.getVis = function () {
                 .on("dragstart", function() { this.parentNode.appendChild(this); })
                 .on("drag", dragmove))*/
             ;
-            // add text in the //add comments from here
+            // the information that appears when you hover over the nodes
             node.append("rect").attr("height", function (d) {
                 return d.dy;
             }).attr("width", sankey.nodeWidth()).style("fill", function (d) {
@@ -57,6 +57,7 @@ window.getVis = function () {
             }).append("title").text(function (d) {
                 return d.name + "\n" + format(d.value);
             });
+            // show subject names in the nodes
             node.append("text").attr("x", 40).attr("y", function (d) {
                 return d.dy / 2;
             }).attr("dy", ".35em").attr("text-anchor", "start").attr("transform", null).text(function (d) {
@@ -65,11 +66,11 @@ window.getVis = function () {
                 return d.x < width / 2;
             }).attr("x", 40 + sankey.nodeWidth()).attr("text-anchor", "start");
 
-            function dragmove(d) {
-                d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
-                sankey.relayout();
-                link.attr("d", path);
-            }
+//            function dragmove(d) {
+//                d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
+//                sankey.relayout();
+//                link.attr("d", path);
+//            }
             // wrapping the labels in the nodes to fit the width of the node and move into the next line if it increases more than the width of
             // the node
             function wrap(text, width) {
